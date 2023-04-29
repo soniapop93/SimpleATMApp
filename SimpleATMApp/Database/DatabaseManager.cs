@@ -1,4 +1,5 @@
 ﻿using SimpleATMApp.User;
+using System.Configuration;
 using System.Data.SQLite;
 
 namespace SimpleATMApp.Database
@@ -157,6 +158,50 @@ namespace SimpleATMApp.Database
             sqLiteCommand.CommandText = strData;
             sqLiteCommand.ExecuteNonQuery();
             sqLiteConnection.Close();
+        }
+
+        public Card getCardForUser(string cardNumber, int cardPin)
+        {
+            sqLiteConnection.Open();
+            SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
+
+            string strData = "SELECT * FROM Cards WHERE card_number = " + cardNumber + ";";
+            sqLiteCommand.CommandText = strData;
+            SQLiteDataReader allDBdata = sqLiteCommand.ExecuteReader();
+
+            Card card = checkCardForUser(allDBdata, cardPin);
+            sqLiteConnection.Close();
+
+            return card;
+        }
+
+        private Card checkCardForUser(SQLiteDataReader allDBdata, int cardPin) 
+        {
+            while (allDBdata.Read())
+            {
+                if(checkPinCard((Int32)(allDBdata[5]), cardPin))
+                {
+                    Card card = new Card(
+                        (Int32)allDBdata[0], 
+                        (Int32)allDBdata[1], 
+                        allDBdata[2].ToString(), 
+                        allDBdata[3].ToString(), 
+                        DateTime.Parse(allDBdata[4].ToString()), 
+                        (Int32)allDBdata[5]);
+                    return card;
+                }
+            }
+            return null;
+            
+        }
+
+        private bool checkPinCard(int dbPin, int cardPin)
+        {
+            if (dbPin == cardPin)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
