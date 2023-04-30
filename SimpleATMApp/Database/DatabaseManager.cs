@@ -1,5 +1,4 @@
 ﻿using SimpleATMApp.User;
-using System.Configuration;
 using System.Data.SQLite;
 
 namespace SimpleATMApp.Database
@@ -158,6 +157,39 @@ namespace SimpleATMApp.Database
             sqLiteCommand.CommandText = strData;
             sqLiteCommand.ExecuteNonQuery();
             sqLiteConnection.Close();
+        }
+
+        public PersonalInformation getUserInfoFromUser(string userID)
+        {
+            sqLiteConnection.Open();
+            SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
+
+            string strData = "SELECT * FROM Users WHERE id = " + userID + ";";
+            sqLiteCommand.CommandText = strData;
+            SQLiteDataReader allDBdata = sqLiteCommand.ExecuteReader();
+
+            PersonalInformation personalInformation = displayUserInfo(allDBdata);
+
+            sqLiteConnection.Close();
+
+            return personalInformation;
+        }
+
+        private PersonalInformation displayUserInfo(SQLiteDataReader allDBdata)
+        {
+            while (allDBdata.Read())
+            {
+                PersonalInformation personalInformation = new PersonalInformation(
+                    allDBdata[1].ToString(), //first name
+                    allDBdata[2].ToString(), //last name
+                    allDBdata[3].ToString(), //address
+                    allDBdata[5].ToString(), //country
+                    allDBdata[6].ToString(), //city
+                    allDBdata[7].ToString(), //mobile phone
+                    allDBdata[8].ToString()); //email
+                return personalInformation;
+            }
+            return null;
         }
 
         public Card getCardForUser(string cardNumber, int cardPin)

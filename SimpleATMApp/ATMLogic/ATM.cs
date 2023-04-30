@@ -26,6 +26,32 @@ namespace SimpleATMApp.ATMLogic
             {
                 Console.WriteLine("PIN is correct. Continue...");
                 //TODO: implement to show transactions, personal info, and withdraw money
+
+                Console.WriteLine("Please select one of the options: \n" +
+                    "1 - Display personal information \n" +
+                    "2 - Display transactions \n" +
+                    "3 - Withdraw money \n" +
+                    "4 - Display money on account\n" +
+                    "5 - EXIT");
+
+                string optionInput = userInput.getUserInput();
+
+                switch (optionInput)
+                {
+                    default:
+                        Console.WriteLine("No correct option selected");
+                        break;
+
+                    case "1":
+                        Console.WriteLine("You have selected option 1 - Display personal information");
+                        //TODO: implement functionality
+                        break;
+
+
+                }
+                    
+
+
             }
 
         }
