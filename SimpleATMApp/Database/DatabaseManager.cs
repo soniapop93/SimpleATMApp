@@ -218,9 +218,9 @@ namespace SimpleATMApp.Database
             return currentMoneyAmount;
         }
 
-        private void updateAmountMoneyForUserAfterWidrawal(string userID, long moneyWidrawn, long currentAmountMoney)
+        public void updateAmountMoneyForUserAfterWidrawal(string userID, int moneyWithdrawn, long currentAmountMoney)
         {
-            long newMoneyAmount = currentAmountMoney - moneyWidrawn;
+            long newMoneyAmount = currentAmountMoney - moneyWithdrawn;
 
             string strData = "UPDATE Users SET cash_availability = " + newMoneyAmount.ToString() + " WHERE user_id = " + userID + ";";
 

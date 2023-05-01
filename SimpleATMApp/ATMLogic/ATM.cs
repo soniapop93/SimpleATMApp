@@ -21,7 +21,7 @@ namespace SimpleATMApp.ATMLogic
                     "1 - Display personal information \n" +
                     "2 - Display transactions \n" +
                     "3 - Withdraw money \n" +
-                    "4 - Display money on account\n" +
+                    "4 - Display money on account \n" +
                     "5 - EXIT";
 
             if (card != null)
@@ -32,6 +32,8 @@ namespace SimpleATMApp.ATMLogic
 
                 string optionInput = userInput.getUserInput();
                 string strDefault = "You have selected option: ";
+
+                string currentMoneyAmount = databaseManager.getAmountMoneyForUser(card.userID.ToString());
 
                 switch (optionInput)
                 {
@@ -102,18 +104,39 @@ namespace SimpleATMApp.ATMLogic
 
                     case "3":
                         Console.WriteLine(strDefault + "3 - Withdraw money");
-                        //TODO: implement functionality
+
+                        Console.WriteLine("Please input the money amount you want to withdraw: ");
+
+                        try
+                        {
+                            int moneyToWithdraw = Int32.Parse(userInput.getUserInput());
+
+                            if (((long)Double.Parse(currentMoneyAmount)) > 0 && 
+                                ((long)Double.Parse(currentMoneyAmount) - moneyToWithdraw) >= 0)
+                            {
+                                databaseManager.updateAmountMoneyForUserAfterWidrawal(card.userID.ToString(), moneyToWithdraw, (long)Double.Parse(currentMoneyAmount));
+
+                                Console.WriteLine("You have withdrawn: " + moneyToWithdraw);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Insufficient funds in your account. You can't withdraw: " + moneyToWithdraw.ToString());
+                            }
+
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Incorrct money value. Please try again...");
+                        }
+
                         break;
 
                     case "4":
                         Console.WriteLine(strDefault + "4 - Display money on account");
 
-                        string currentMoneyAmount = databaseManager.getAmountMoneyForUser(card.userID.ToString());
-
                         if (!String.IsNullOrEmpty(currentMoneyAmount))
                         {
                             Console.WriteLine("Current money in your account: " + currentMoneyAmount);
-
                         }
                         else
                         {
@@ -124,7 +147,6 @@ namespace SimpleATMApp.ATMLogic
 
                     case "5":
                         Console.WriteLine(strDefault + "5 - EXIT");
-                        //TODO: implement functionality
                         break;
                 }
             }
