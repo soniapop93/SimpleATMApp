@@ -17,16 +17,18 @@ namespace SimpleATMApp.ATMLogic
 
             Card card = databaseManager.getCardForUser(inputCardNumber, inputPin);
 
-            if (card != null)
-            {
-                Console.WriteLine("PIN is correct. Continue...");
-
-                Console.WriteLine("Please select one of the options: \n" +
+            string optionScreen = "Please select one of the options: \n" +
                     "1 - Display personal information \n" +
                     "2 - Display transactions \n" +
                     "3 - Withdraw money \n" +
                     "4 - Display money on account\n" +
-                    "5 - EXIT");
+                    "5 - EXIT";
+
+            if (card != null)
+            {
+                Console.WriteLine("PIN is correct. Continue...");
+
+                Console.WriteLine(optionScreen);
 
                 string optionInput = userInput.getUserInput();
                 string strDefault = "You have selected option: ";
@@ -64,22 +66,50 @@ namespace SimpleATMApp.ATMLogic
                         else
                         {
                             Console.WriteLine("No personal information found about user. Contact bank for more information");
+                            Console.WriteLine(optionScreen);
+
                         }
-
-
                         break;
+
                     case "2":
                         Console.WriteLine(strDefault + "2 - Display transactions");
-                        //TODO: implement functionality
+
+                        List<Transaction> transactions = databaseManager.getTransactionsForUser(card.userID.ToString());
+
+                        if (transactions.Count > 0)
+                        {
+                            for (int i = 0; i < transactions.Count; i++)
+                            {
+                                Console.WriteLine("**************************************");
+                                string strTransaction = String.Format(
+                                    "Transaction ID: {0}\n" +
+                                    "Transaction Date: {1}\n" +
+                                    "Transaction Amount: {2}\n" +
+                                    "Transaction Currency: {3}", 
+                                    transactions[i].transactionID, 
+                                    transactions[i].transactionDate.ToString(), 
+                                    transactions[i].transactionAmount.ToString(), 
+                                    transactions[i].transactionCurrency);
+
+                                Console.WriteLine(strTransaction);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("You have no transaction history...");
+                        }
                         break;
+
                     case "3":
                         Console.WriteLine(strDefault + "3 - Withdraw money");
                         //TODO: implement functionality
                         break;
+
                     case "4":
                         Console.WriteLine(strDefault + "4 - Display money on account");
                         //TODO: implement functionality
                         break;
+
                     case "5":
                         Console.WriteLine(strDefault + "5 - EXIT");
                         //TODO: implement functionality

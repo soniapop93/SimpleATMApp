@@ -159,6 +159,39 @@ namespace SimpleATMApp.Database
             sqLiteConnection.Close();
         }
 
+        public List<Transaction> getTransactionsForUser(string userID)
+        {
+            sqLiteConnection.Open();
+            SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
+
+            string strData = "SELECT * FROM Transactions WHERE user_id = " + userID + ";";
+            sqLiteCommand.CommandText = strData;
+            SQLiteDataReader allDBdata = sqLiteCommand.ExecuteReader();
+
+            List<Transaction> transactions = displayTransactionsForUser(allDBdata);
+            sqLiteConnection.Close();
+
+            return transactions;
+        }
+
+        private List<Transaction> displayTransactionsForUser(SQLiteDataReader allDBdata)
+        {
+            List<Transaction> transactions = new List<Transaction>();
+            while (allDBdata.Read())
+            {
+                Transaction transaction = new Transaction(
+                    allDBdata[0].ToString(), // transactionID
+                    allDBdata[1].ToString(), // userID
+                    DateTime.Parse(allDBdata[2].ToString()), // transactionDate
+                    (long)Double.Parse(allDBdata[3].ToString()), // transactionAmount
+                    allDBdata[4].ToString()); // transactionCurrency
+
+                transactions.Add(transaction);
+            }
+            return transactions;
+        }
+
+
         public PersonalInformation getUserInfoFromUser(string userID)
         {
             sqLiteConnection.Open();
