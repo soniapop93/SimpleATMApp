@@ -107,7 +107,19 @@ namespace SimpleATMApp.ATMLogic
 
                     case "4":
                         Console.WriteLine(strDefault + "4 - Display money on account");
-                        //TODO: implement functionality
+
+                        string currentMoneyAmount = databaseManager.getAmountMoneyForUser(card.userID.ToString());
+
+                        if (!String.IsNullOrEmpty(currentMoneyAmount))
+                        {
+                            Console.WriteLine("Current money in your account: " + currentMoneyAmount);
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("You have no money in your account...");
+                        }
+
                         break;
 
                     case "5":

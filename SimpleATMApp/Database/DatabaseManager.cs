@@ -74,7 +74,7 @@ namespace SimpleATMApp.Database
                 "(transaction_id INT PRIMARY KEY," +
                 "user_id INT," +
                 "transaction_date TEXT," +
-                "transaction_ammount TEXT," +
+                "transaction_Amount TEXT," +
                 "transaction_currency TEXT)";
 
             sqLiteConnection.Open();
@@ -140,16 +140,16 @@ namespace SimpleATMApp.Database
             sqLiteConnection.Close();
         }
 
-        public void insertDataTransactions(UserDetails user, DateTime transactionDate, string transactionAmmount, string transactionCurrency)
+        public void insertDataTransactions(UserDetails user, DateTime transactionDate, string transactionAmount, string transactionCurrency)
         {
             string strData = "INSERT INTO Transactions " +
                "(user_id INT," +
                "transaction_date TEXT," +
-               "transaction_ammount TEXT," +
+               "transaction_Amount TEXT," +
                "transaction_currency TEXT) VALUES " +
                "(" +
                transactionDate + ",'" +
-               transactionAmmount + "','" +
+               transactionAmount + "','" +
                transactionCurrency + "');";
 
             sqLiteConnection.Open();
@@ -191,6 +191,44 @@ namespace SimpleATMApp.Database
             return transactions;
         }
 
+        public string getAmountMoneyForUser(string userID)
+        {
+            sqLiteConnection.Open();
+            SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
+
+            string strData = "SELECT * FROM Users WHERE user_id = " + userID + ";";
+
+            sqLiteCommand.CommandText = strData;
+            SQLiteDataReader allDBdata = sqLiteCommand.ExecuteReader();
+
+            string currentMoneyAmount = displayAmountMoneyForUser(allDBdata);
+
+            sqLiteConnection.Close();
+
+            return currentMoneyAmount;
+        }
+
+        private string displayAmountMoneyForUser(SQLiteDataReader allDBdata)
+        {
+            string currentMoneyAmount = "";
+            while (allDBdata.Read())
+            {
+                currentMoneyAmount = allDBdata[9].ToString();
+            }
+            return currentMoneyAmount;
+        }
+
+        private void updateAmountMoneyForUserAfterWidrawal(string userID, long moneyWidrawn, long currentAmountMoney)
+        {
+            long newMoneyAmount = currentAmountMoney - moneyWidrawn;
+
+            string strData = "UPDATE Users SET cash_availability = " + newMoneyAmount.ToString() + " WHERE user_id = " + userID + ";";
+
+            SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
+            sqLiteCommand.CommandText = strData;
+            sqLiteCommand.ExecuteNonQuery();
+            sqLiteConnection.Close();
+        }
 
         public PersonalInformation getUserInfoFromUser(string userID)
         {
