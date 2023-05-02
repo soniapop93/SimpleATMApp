@@ -31,7 +31,7 @@ namespace SimpleATMApp.Database
         private void createTableUsers()
         {
             string strSql = "CREATE TABLE IF NOT EXISTS Users " +
-                "(user_id INT PRIMARY KEY," +
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "first_name TEXT," +
                 "last_name TEXT," +
                 "address TEXT," +
@@ -54,7 +54,7 @@ namespace SimpleATMApp.Database
         private void createTableCards()
         {
             string strSql = "CREATE TABLE IF NOT EXISTS Cards " +
-                "(card_id INT PRIMARY KEY," +
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "user_id INT," +
                 "card_number TEXT," +
                 "card_type TEXT," +
@@ -71,7 +71,7 @@ namespace SimpleATMApp.Database
         private void createTableTransactions()
         {
             string strSql = "CREATE TABLE IF NOT EXISTS Transactions " +
-                "(transaction_id INT PRIMARY KEY," +
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "user_id INT," +
                 "transaction_date TEXT," +
                 "transaction_Amount TEXT," +
@@ -87,17 +87,17 @@ namespace SimpleATMApp.Database
         public void insertDataUsers(UserDetails user)
         {
             string strData = "INSERT INTO Users " +
-                "(first_name TEXT," +
-                "last_name TEXT," +
-                "address TEXT," +
-                "country TEXT," +
-                "city TEXT," +
-                "mobile_phone TEXT," +
-                "email TEXT," +
-                "card_id INT," +
-                "cash_availability TEXT," +
-                "limitWithdrawal INT," +
-                "transaction_ids TEXT) VALUES " +
+                "(first_name," +
+                "last_name," +
+                "address," +
+                "country," +
+                "city," +
+                "mobile_phone," +
+                "email," +
+                "card_id," +
+                "cash_availability," +
+                "limitWithdrawal," +
+                "transaction_ids) VALUES " +
                 "('" +
                 user.personalInformation.firstName + "','" +
                 user.personalInformation.lastName + "','" +
@@ -107,9 +107,9 @@ namespace SimpleATMApp.Database
                 user.personalInformation.mobilePhone + "','" +
                 user.personalInformation.email + "'," + 
                 user.card.cardID + ",'" + 
-                user.cashAvailability + "'," + 
-                user.limitWithdrawal + ",'" + 
-                String.Join(",", user.transactions) + "');";
+                user.cashAvailability + "','" + 
+                user.limitWithdrawal + "','" + 
+                String.Join("-", user.transactions) + "');";
 
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
@@ -121,17 +121,17 @@ namespace SimpleATMApp.Database
         public void insertDataCards(UserDetails user)
         {
             string strData = "INSERT INTO Cards " +
-               "(user_id INT," + 
-               "card_number TEXT," +
-               "card_type TEXT," +
-               "expiration_date TEXT," +
-               "pin TEXT) VALUES " +
+               "(user_id," + 
+               "card_number," +
+               "card_type," +
+               "expiration_date," +
+               "pin) VALUES " +
                "(" +
                user.userID + ",'" +
                user.card.cardNumber + "','" +
                user.card.cardType + "','" +
                user.card.expirationDate + "','" +
-               user.card.pin + "');";
+               user.card.pin.ToString() + "');";
 
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
@@ -143,12 +143,13 @@ namespace SimpleATMApp.Database
         public void insertDataTransactions(UserDetails user, DateTime transactionDate, string transactionAmount, string transactionCurrency)
         {
             string strData = "INSERT INTO Transactions " +
-               "(user_id INT," +
-               "transaction_date TEXT," +
-               "transaction_Amount TEXT," +
-               "transaction_currency TEXT) VALUES " +
-               "(" +
-               transactionDate + ",'" +
+               "(user_id," +
+               "transaction_date," +
+               "transaction_Amount," +
+               "transaction_currency) VALUES " +
+               "('" +
+               user.userID.ToString() + "','" +
+               transactionDate.ToString() + "','" +
                transactionAmount + "','" +
                transactionCurrency + "');";
 
@@ -196,7 +197,7 @@ namespace SimpleATMApp.Database
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
 
-            string strData = "SELECT * FROM Users WHERE user_id = " + userID + ";";
+            string strData = "SELECT * FROM Users WHERE id = " + userID + ";";
 
             sqLiteCommand.CommandText = strData;
             SQLiteDataReader allDBdata = sqLiteCommand.ExecuteReader();
@@ -282,15 +283,15 @@ namespace SimpleATMApp.Database
         {
             while (allDBdata.Read())
             {
-                if(checkPinCard((Int32)(allDBdata[5]), cardPin))
+                if(checkPinCard(Int32.Parse(allDBdata[5].ToString()), cardPin))
                 {
                     Card card = new Card(
-                        (Int32)allDBdata[0], 
-                        (Int32)allDBdata[1], 
+                        Int32.Parse(allDBdata[0].ToString()), 
+                        Int32.Parse(allDBdata[1].ToString()), 
                         allDBdata[2].ToString(), 
                         allDBdata[3].ToString(), 
                         DateTime.Parse(allDBdata[4].ToString()), 
-                        (Int32)allDBdata[5]);
+                        Int32.Parse(allDBdata[5].ToString()));
                     return card;
                 }
             }
