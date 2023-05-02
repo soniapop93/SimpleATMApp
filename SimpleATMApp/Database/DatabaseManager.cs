@@ -86,6 +86,14 @@ namespace SimpleATMApp.Database
 
         public void insertDataUsers(UserDetails user)
         {
+            List<string> transactionListIds = new List<string>();
+
+            for (int i = 0; i < user.transactions.Count; i++)
+            {
+                transactionListIds.Add(user.transactions[i].transactionID);            
+            }
+
+
             string strData = "INSERT INTO Users " +
                 "(first_name," +
                 "last_name," +
@@ -109,7 +117,7 @@ namespace SimpleATMApp.Database
                 user.card.cardID + ",'" + 
                 user.cashAvailability + "','" + 
                 user.limitWithdrawal + "','" + 
-                String.Join("-", user.transactions) + "');";
+                String.Join("-", transactionListIds) + "');";
 
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
@@ -223,8 +231,9 @@ namespace SimpleATMApp.Database
         {
             long newMoneyAmount = currentAmountMoney - moneyWithdrawn;
 
-            string strData = "UPDATE Users SET cash_availability = " + newMoneyAmount.ToString() + " WHERE user_id = " + userID + ";";
+            string strData = "UPDATE Users SET cash_availability = '" + newMoneyAmount.ToString() + "' WHERE id = " + userID + ";";
 
+            sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
             sqLiteCommand.CommandText = strData;
             sqLiteCommand.ExecuteNonQuery();
@@ -255,10 +264,10 @@ namespace SimpleATMApp.Database
                     allDBdata[1].ToString(), //first name
                     allDBdata[2].ToString(), //last name
                     allDBdata[3].ToString(), //address
-                    allDBdata[5].ToString(), //country
-                    allDBdata[6].ToString(), //city
-                    allDBdata[7].ToString(), //mobile phone
-                    allDBdata[8].ToString()); //email
+                    allDBdata[4].ToString(), //country
+                    allDBdata[5].ToString(), //city
+                    allDBdata[6].ToString(), //mobile phone
+                    allDBdata[7].ToString()); //email
                 return personalInformation;
             }
             return null;

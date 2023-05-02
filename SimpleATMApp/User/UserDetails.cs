@@ -8,7 +8,6 @@
         public long cashAvailability { get; set; }
         public bool limitWithdrawal { get; set; }
         public PersonalInformation personalInformation { get; set; }
-
         public UserDetails(int userID, Card card, List<Transaction> transactions, long cashAvailability, bool limitWithdrawal, PersonalInformation personalInformation)
         {
             this.userID = userID;
