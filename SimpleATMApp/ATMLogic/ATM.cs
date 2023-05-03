@@ -115,9 +115,16 @@ namespace SimpleATMApp.ATMLogic
                                 if ((Double.Parse(currentMoneyAmount)) > 0 &&
                                     (Double.Parse(currentMoneyAmount) - moneyToWithdraw) >= 0)
                                 {
-                                    databaseManager.updateAmountMoneyForUserAfterWidrawal(card.userID.ToString(), moneyToWithdraw, Double.Parse(currentMoneyAmount));
+                                    if (moneyToWithdraw <= 1000)
+                                    {
+                                        databaseManager.updateAmountMoneyForUserAfterWidrawal(card.userID.ToString(), moneyToWithdraw, Double.Parse(currentMoneyAmount));
 
-                                    Console.WriteLine("You have withdrawn: " + moneyToWithdraw);
+                                        Console.WriteLine("You have withdrawn: " + moneyToWithdraw);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("You can't withdraw more than 1000/transaction. Please input a smaller value");
+                                    }
                                 }
                                 else
                                 {
