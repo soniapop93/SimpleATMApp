@@ -65,8 +65,6 @@ namespace SimpleATMApp.ATMLogic
                                     personalInformation.city,
                                     personalInformation.mobilePhone,
                                     personalInformation.email));
-
-                                //TODO: implemenent to return to main screen
                             }
                             else
                             {
@@ -114,10 +112,10 @@ namespace SimpleATMApp.ATMLogic
                             {
                                 int moneyToWithdraw = Int32.Parse(userInput.getUserInput());
 
-                                if (((long)Double.Parse(currentMoneyAmount)) > 0 &&
-                                    ((long)Double.Parse(currentMoneyAmount) - moneyToWithdraw) >= 0)
+                                if ((Double.Parse(currentMoneyAmount)) > 0 &&
+                                    (Double.Parse(currentMoneyAmount) - moneyToWithdraw) >= 0)
                                 {
-                                    databaseManager.updateAmountMoneyForUserAfterWidrawal(card.userID.ToString(), moneyToWithdraw, (long)Double.Parse(currentMoneyAmount));
+                                    databaseManager.updateAmountMoneyForUserAfterWidrawal(card.userID.ToString(), moneyToWithdraw, Double.Parse(currentMoneyAmount));
 
                                     Console.WriteLine("You have withdrawn: " + moneyToWithdraw);
                                 }

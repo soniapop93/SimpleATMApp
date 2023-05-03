@@ -12,6 +12,8 @@ namespace SimpleATMApp.Database
             {
                 Card card = new Card(i, i, generateCardNumber(), "CardType " + i, DateTime.Parse("2026/04/30"), generatePin());
 
+                Console.WriteLine("Card: " + card.cardNumber + " pin: " + card.pin);
+
                 PersonalInformation personalInformation = new PersonalInformation("FirstName " + i, "LastName " + i, "street Name " + i, "Country " + i, "City " + i, "077777777", "email.user" + i + "@gmail.com");
                 UserDetails user = new UserDetails(i, card, generateTransactions(), i * 10000, false, personalInformation);
 

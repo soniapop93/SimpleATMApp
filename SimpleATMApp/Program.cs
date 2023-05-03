@@ -18,20 +18,13 @@ public class Program
 
         Console.WriteLine("------------------------ SCRIPT STARTED ------------------------");
 
-        // Create DB connection
-        DatabaseManager databaseManager = new DatabaseManager();
-
-        //ONLY FOR TESTING
-        MockDataDB mockDataDB = new MockDataDB();
-        mockDataDB.fillDB(databaseManager);
-       
-
+        ////ONLY FOR TESTING
+        //MockDataDB mockDataDB = new MockDataDB();
+        //mockDataDB.fillDB(databaseManager);
         //Console.WriteLine("Data inserted in db for testing");
 
         ATM atm = new ATM();
         atm.getCardFromUser();
-
-
 
         Console.WriteLine("------------------------ SCRIPT FINISHED ------------------------");
     }

@@ -178,6 +178,7 @@ namespace SimpleATMApp.Database
             SQLiteDataReader allDBdata = sqLiteCommand.ExecuteReader();
 
             List<Transaction> transactions = displayTransactionsForUser(allDBdata);
+            allDBdata.Close();
             sqLiteConnection.Close();
 
             return transactions;
@@ -212,6 +213,7 @@ namespace SimpleATMApp.Database
 
             string currentMoneyAmount = displayAmountMoneyForUser(allDBdata);
 
+            allDBdata.Close();
             sqLiteConnection.Close();
 
             return currentMoneyAmount;
@@ -223,13 +225,14 @@ namespace SimpleATMApp.Database
             while (allDBdata.Read())
             {
                 currentMoneyAmount = allDBdata[9].ToString();
+                break;
             }
             return currentMoneyAmount;
         }
 
-        public void updateAmountMoneyForUserAfterWidrawal(string userID, int moneyWithdrawn, long currentAmountMoney)
+        public void updateAmountMoneyForUserAfterWidrawal(string userID, int moneyWithdrawn, double currentAmountMoney)
         {
-            long newMoneyAmount = currentAmountMoney - moneyWithdrawn;
+            double newMoneyAmount = currentAmountMoney - moneyWithdrawn;
 
             string strData = "UPDATE Users SET cash_availability = '" + newMoneyAmount.ToString() + "' WHERE id = " + userID + ";";
 
@@ -251,6 +254,7 @@ namespace SimpleATMApp.Database
 
             PersonalInformation personalInformation = displayUserInfo(allDBdata);
 
+            allDBdata.Close();
             sqLiteConnection.Close();
 
             return personalInformation;
@@ -283,6 +287,8 @@ namespace SimpleATMApp.Database
             SQLiteDataReader allDBdata = sqLiteCommand.ExecuteReader();
 
             Card card = checkCardForUser(allDBdata, cardPin);
+
+            allDBdata.Close();
             sqLiteConnection.Close();
 
             return card;
