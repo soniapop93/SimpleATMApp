@@ -117,9 +117,21 @@ namespace SimpleATMApp.ATMLogic
                                 {
                                     if (moneyToWithdraw <= 1000)
                                     {
-                                        databaseManager.updateAmountMoneyForUserAfterWidrawal(card.userID.ToString(), moneyToWithdraw, Double.Parse(currentMoneyAmount));
+                                        List<Transaction> transactionsForUser = databaseManager.getTransactionsForUser(card.userID.ToString());
+                                        bool limit = checkTransactionsForUser(transactionsForUser);
 
-                                        Console.WriteLine("You have withdrawn: " + moneyToWithdraw);
+                                        databaseManager.updateUserLimitWithdrawal(card.userID.ToString(), limit);
+
+                                        if(!limit)
+                                        {
+                                            databaseManager.updateAmountMoneyForUserAfterWidrawal(card.userID.ToString(), moneyToWithdraw, Double.Parse(currentMoneyAmount));
+
+                                            Console.WriteLine("You have withdrawn: " + moneyToWithdraw);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("You have made more than 10 transactions today");
+                                        }
                                     }
                                     else
                                     {
@@ -159,6 +171,25 @@ namespace SimpleATMApp.ATMLogic
                     }
                 }
             }
+        }
+
+        public bool checkTransactionsForUser(List<Transaction> transactions)
+        {
+            List<Transaction> todaysTransactions = new List<Transaction>();
+
+            for (int i = 0; i < transactions.Count; i++)
+            {
+                if (transactions[i].transactionDate.Date == DateTime.Now.Date)
+                {
+                    todaysTransactions.Add(transactions[i]);
+                }
+            }
+
+            if (todaysTransactions.Count > 10) 
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

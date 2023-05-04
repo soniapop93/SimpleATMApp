@@ -104,7 +104,7 @@ namespace SimpleATMApp.Database
                 "email," +
                 "card_id," +
                 "cash_availability," +
-                "limitWithdrawal," +
+                "limit_withdrawal," +
                 "transaction_ids) VALUES " +
                 "('" +
                 user.personalInformation.firstName + "','" +
@@ -235,6 +235,17 @@ namespace SimpleATMApp.Database
             double newMoneyAmount = currentAmountMoney - moneyWithdrawn;
 
             string strData = "UPDATE Users SET cash_availability = '" + newMoneyAmount.ToString() + "' WHERE id = " + userID + ";";
+
+            sqLiteConnection.Open();
+            SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
+            sqLiteCommand.CommandText = strData;
+            sqLiteCommand.ExecuteNonQuery();
+            sqLiteConnection.Close();
+        }
+
+        public void updateUserLimitWithdrawal(string userID, bool limit)
+        {
+            string strData = "UPDATE Users Set limit_withdrawal = '" + limit.ToString() + "' WHERE id = " + userID + ";";
 
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
