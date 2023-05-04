@@ -41,7 +41,7 @@ namespace SimpleATMApp.Database
                 "email TEXT," +
                 "card_id INT," +
                 "cash_availability TEXT," +
-                "limitWithdrawal INT," +
+                "limit_withdrawal INT," +
                 "transaction_ids TEXT)"; 
             
             sqLiteConnection.Open();
@@ -148,7 +148,7 @@ namespace SimpleATMApp.Database
             sqLiteConnection.Close();
         }
 
-        public void insertDataTransactions(UserDetails user, DateTime transactionDate, string transactionAmount, string transactionCurrency)
+        public void insertDataTransactions(string userID, DateTime transactionDate, string transactionAmount, string transactionCurrency)
         {
             string strData = "INSERT INTO Transactions " +
                "(user_id," +
@@ -156,7 +156,7 @@ namespace SimpleATMApp.Database
                "transaction_Amount," +
                "transaction_currency) VALUES " +
                "('" +
-               user.userID.ToString() + "','" +
+               userID + "','" +
                transactionDate.ToString() + "','" +
                transactionAmount + "','" +
                transactionCurrency + "');";

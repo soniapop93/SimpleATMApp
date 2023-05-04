@@ -20,7 +20,7 @@ public class Program
                 [X] -> Verifying the user by asking for a PIN
                 [X] -> In case of negative verification, logging out the user
                 [X] -> In case of positive verification, showing multiple options, including cash availability, the previous transactions, cash withdrawal, personal information
-                [ ] -> Giving the user the ability to withdraw up to $1,000 worth of cash in one transaction, with total transactions limited to ten per day.
+                [X] -> Giving the user the ability to withdraw up to $1,000 worth of cash in one transaction, with total transactions limited to ten per day.
 
            =============================================================
            =============================================================
@@ -29,7 +29,8 @@ public class Program
         Console.WriteLine("------------------------ SCRIPT STARTED ------------------------");
 
         // ONLY FOR TESTING -> can be used to add some testing data in database
-        
+
+        //DatabaseManager databaseManager= new DatabaseManager();
         //MockDataDB mockDataDB = new MockDataDB();
         //mockDataDB.fillDB(databaseManager);
         //Console.WriteLine("Data inserted in db for testing");

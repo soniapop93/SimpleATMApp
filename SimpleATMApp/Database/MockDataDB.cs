@@ -22,7 +22,7 @@ namespace SimpleATMApp.Database
 
                 for (int j = 0; j < user.transactions.Count; j++)
                 {
-                    databaseManager.insertDataTransactions(user, user.transactions[j].transactionDate, user.transactions[j].transactionAmount.ToString(), user.transactions[j].transactionCurrency);
+                    databaseManager.insertDataTransactions(card.userID.ToString(), user.transactions[j].transactionDate, user.transactions[j].transactionAmount.ToString(), user.transactions[j].transactionCurrency);
                 }
             }
         }

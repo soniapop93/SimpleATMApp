@@ -7,6 +7,8 @@ namespace SimpleATMApp.ATMLogic
     {
         UserInput userInput = new UserInput();
         DatabaseManager databaseManager = new DatabaseManager();
+        string currency = "euro";
+
         public void getCardFromUser()
         {
             Console.WriteLine("Please insert card number: ");
@@ -125,6 +127,7 @@ namespace SimpleATMApp.ATMLogic
                                         if(!limit)
                                         {
                                             databaseManager.updateAmountMoneyForUserAfterWidrawal(card.userID.ToString(), moneyToWithdraw, Double.Parse(currentMoneyAmount));
+                                            databaseManager.insertDataTransactions(card.userID.ToString(), DateTime.Now, moneyToWithdraw.ToString(), currency);
 
                                             Console.WriteLine("You have withdrawn: " + moneyToWithdraw);
                                         }
@@ -167,13 +170,14 @@ namespace SimpleATMApp.ATMLogic
 
                         case "5":
                             Console.WriteLine(strDefault + "5 - EXIT");
+                            return;
                             break;
                     }
                 }
             }
         }
 
-        public bool checkTransactionsForUser(List<Transaction> transactions)
+        private bool checkTransactionsForUser(List<Transaction> transactions)
         {
             List<Transaction> todaysTransactions = new List<Transaction>();
 
