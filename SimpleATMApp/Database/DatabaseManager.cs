@@ -41,8 +41,7 @@ namespace SimpleATMApp.Database
                 "email TEXT," +
                 "card_id INT," +
                 "cash_availability TEXT," +
-                "limit_withdrawal INT," +
-                "transaction_ids TEXT)"; 
+                "limit_withdrawal TEXT);"; 
             
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
@@ -59,7 +58,7 @@ namespace SimpleATMApp.Database
                 "card_number TEXT," +
                 "card_type TEXT," +
                 "expiration_date TEXT," +
-                "pin TEXT)";
+                "pin TEXT);";
 
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
@@ -75,7 +74,7 @@ namespace SimpleATMApp.Database
                 "user_id INT," +
                 "transaction_date TEXT," +
                 "transaction_Amount TEXT," +
-                "transaction_currency TEXT)";
+                "transaction_currency TEXT);";
 
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
@@ -86,14 +85,6 @@ namespace SimpleATMApp.Database
 
         public void insertDataUsers(UserDetails user)
         {
-            List<string> transactionListIds = new List<string>();
-
-            for (int i = 0; i < user.transactions.Count; i++)
-            {
-                transactionListIds.Add(user.transactions[i].transactionID);            
-            }
-
-
             string strData = "INSERT INTO Users " +
                 "(first_name," +
                 "last_name," +
@@ -104,8 +95,7 @@ namespace SimpleATMApp.Database
                 "email," +
                 "card_id," +
                 "cash_availability," +
-                "limit_withdrawal," +
-                "transaction_ids) VALUES " +
+                "limit_withdrawal) VALUES " +
                 "('" +
                 user.personalInformation.firstName + "','" +
                 user.personalInformation.lastName + "','" +
@@ -116,8 +106,7 @@ namespace SimpleATMApp.Database
                 user.personalInformation.email + "'," + 
                 user.card.cardID + ",'" + 
                 user.cashAvailability + "','" + 
-                user.limitWithdrawal + "','" + 
-                String.Join("-", transactionListIds) + "');";
+                user.limitWithdrawal.ToString() + "');";
 
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();

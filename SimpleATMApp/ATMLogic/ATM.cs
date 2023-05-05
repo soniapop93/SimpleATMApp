@@ -189,7 +189,7 @@ namespace SimpleATMApp.ATMLogic
                 }
             }
 
-            if (todaysTransactions.Count > 10) 
+            if (todaysTransactions.Count > 9) 
             {
                 return true;
             }
