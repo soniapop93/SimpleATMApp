@@ -128,7 +128,7 @@ namespace SimpleATMApp.Database
                user.card.cardNumber + "','" +
                user.card.cardType + "','" +
                user.card.expirationDate + "','" +
-               user.card.pin.ToString() + "');";
+               user.card.hashedPin + "');";
 
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
@@ -277,7 +277,7 @@ namespace SimpleATMApp.Database
             return null;
         }
 
-        public Card getCardForUser(string cardNumber, int cardPin)
+        public Card getCardForUser(string cardNumber, string hashedPin)
         {
             sqLiteConnection.Open();
             SQLiteCommand sqLiteCommand = sqLiteConnection.CreateCommand();
@@ -286,7 +286,7 @@ namespace SimpleATMApp.Database
             sqLiteCommand.CommandText = strData;
             SQLiteDataReader allDBdata = sqLiteCommand.ExecuteReader();
 
-            Card card = checkCardForUser(allDBdata, cardPin);
+            Card card = checkCardForUser(allDBdata, hashedPin);
 
             allDBdata.Close();
             sqLiteConnection.Close();
@@ -294,11 +294,11 @@ namespace SimpleATMApp.Database
             return card;
         }
 
-        private Card checkCardForUser(SQLiteDataReader allDBdata, int cardPin) 
+        private Card checkCardForUser(SQLiteDataReader allDBdata, string hashedPin) 
         {
             while (allDBdata.Read())
             {
-                if(checkPinCard(Int32.Parse(allDBdata[5].ToString()), cardPin))
+                if(checkPinCard(allDBdata[5].ToString(), hashedPin))
                 {
                     Card card = new Card(
                         Int32.Parse(allDBdata[0].ToString()), 
@@ -306,7 +306,7 @@ namespace SimpleATMApp.Database
                         allDBdata[2].ToString(), 
                         allDBdata[3].ToString(), 
                         DateTime.Parse(allDBdata[4].ToString()), 
-                        Int32.Parse(allDBdata[5].ToString()));
+                        allDBdata[5].ToString());
                     return card;
                 }
             }
@@ -314,9 +314,9 @@ namespace SimpleATMApp.Database
             
         }
 
-        private bool checkPinCard(int dbPin, int cardPin)
+        private bool checkPinCard(string dbHashedPin, string hashedPin)
         {
-            if (dbPin == cardPin)
+            if (dbHashedPin.Equals(hashedPin))
             {
                 return true;
             }

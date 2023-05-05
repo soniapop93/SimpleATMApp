@@ -1,4 +1,5 @@
 ﻿using SimpleATMApp.User;
+using SimpleATMApp.Utilities;
 
 namespace SimpleATMApp.Database
 {
@@ -10,9 +11,11 @@ namespace SimpleATMApp.Database
         {
             for (int i = 0; i < 100; i++)
             {
-                Card card = new Card(i, i, generateCardNumber(), "CardType " + i, DateTime.Parse("2026/04/30"), generatePin());
+                int pin = generatePin();
 
-                Console.WriteLine("Card: " + card.cardNumber + " pin: " + card.pin);
+                Card card = new Card(i, i, generateCardNumber(), "CardType " + i, DateTime.Parse("2026/04/30"), HashPin.hashPin(pin.ToString()));
+
+                Console.WriteLine("Card: " + card.cardNumber + " pin: " + pin);
 
                 PersonalInformation personalInformation = new PersonalInformation("FirstName " + i, "LastName " + i, "street Name " + i, "Country " + i, "City " + i, "077777777", "email.user" + i + "@gmail.com");
                 UserDetails user = new UserDetails(i, card, generateTransactions(), i * 10000, false, personalInformation);

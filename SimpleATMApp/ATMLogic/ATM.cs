@@ -1,5 +1,7 @@
 ﻿using SimpleATMApp.Database;
 using SimpleATMApp.User;
+using SimpleATMApp.Utilities;
+using System.Security.Policy;
 
 namespace SimpleATMApp.ATMLogic
 {
@@ -17,7 +19,9 @@ namespace SimpleATMApp.ATMLogic
             Console.WriteLine("Please insert PIN: ");
             int inputPin = Int32.Parse(userInput.getUserInput());
 
-            Card card = databaseManager.getCardForUser(inputCardNumber, inputPin);
+            string hashedPin = HashPin.hashPin(inputPin.ToString());
+
+            Card card = databaseManager.getCardForUser(inputCardNumber, hashedPin);
 
             string optionScreen = "Please select one of the options: \n" +
                     "1 - Display personal information \n" +
@@ -165,7 +169,6 @@ namespace SimpleATMApp.ATMLogic
                             {
                                 Console.WriteLine("You have no money in your account...");
                             }
-
                             break;
 
                         case "5":
