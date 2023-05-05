@@ -1,8 +1,7 @@
 
 # SimpleATMApp
 
-This simple project will essentially create a simulation of an ATM within a Windows program. 
-
+This simple project will essentially create a simulation of an ATM that takes the input from user.
     
 
 ## What the script does
